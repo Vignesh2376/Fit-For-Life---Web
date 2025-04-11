@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fit for Life - Workout Plan</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="workout-plan.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Override any navigation styles */
+        nav {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="workout-container">
+            <div class="header">
+                <div class="header-icon">
+                    <i class="fas fa-dumbbell"></i>
+                </div>
+                <h1>Your Custom Workout Plan</h1>
+                <p class="subtitle">Select a body part and difficulty level to view exercises</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 100%"></div>
+                </div>
+                <div class="user-info">
+                    <span id="userName"></span>
+                    <button onclick="UserManagement.logout()" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <div class="difficulty-selector">
+                <button class="difficulty-btn active" data-level="beginner">Beginner</button>
+                <button class="difficulty-btn" data-level="intermediate">Intermediate</button>
+                <button class="difficulty-btn" data-level="pro">Pro</button>
+            </div>
+
+            <div class="body-parts-grid">
+                <div class="body-part-card" data-part="chest">
+                    <div class="card-header">
+                        <i class="fas fa-dumbbell"></i>
+                        <h2>Chest</h2>
+                    </div>
+                    <div class="exercise-count"><span class="count">4</span> exercises</div>
+                </div>
+
+                <div class="body-part-card" data-part="back">
+                    <div class="card-header">
+                        <i class="fas fa-dumbbell"></i>
+                        <h2>Back</h2>
+                    </div>
+                    <div class="exercise-count"><span class="count">4</span> exercises</div>
+                </div>
+
+                <div class="body-part-card" data-part="shoulders">
+                    <div class="card-header">
+                        <i class="fas fa-dumbbell"></i>
+                        <h2>Shoulders</h2>
+                    </div>
+                    <div class="exercise-count"><span class="count">4</span> exercises</div>
+                </div>
+
+                <div class="body-part-card" data-part="biceps">
+                    <div class="card-header">
+                        <i class="fas fa-dumbbell"></i>
+                        <h2>Biceps</h2>
+                    </div>
+                    <div class="exercise-count"><span class="count">4</span> exercises</div>
+                </div>
+
+                <div class="body-part-card" data-part="triceps">
+                    <div class="card-header">
+                        <i class="fas fa-dumbbell"></i>
+                        <h2>Triceps</h2>
+                    </div>
+                    <div class="exercise-count"><span class="count">4</span> exercises</div>
+                </div>
+
+                <div class="body-part-card" data-part="forearms">
+                    <div class="card-header">
+                        <i class="fas fa-dumbbell"></i>
+                        <h2>Forearms</h2>
+                    </div>
+                    <div class="exercise-count"><span class="count">4</span> exercises</div>
+                </div>
+
+                <div class="body-part-card" data-part="legs">
+                    <div class="card-header">
+                        <i class="fas fa-dumbbell"></i>
+                        <h2>Legs</h2>
+                    </div>
+                    <div class="exercise-count"><span class="count">4</span> exercises</div>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <button class="btn btn-secondary" onclick="window.location.href='diet-plan.html'">
+                    <i class="fas fa-arrow-right"></i>
+                    Next: Diet Plan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Screen Exercises Container -->
+    <div class="exercises-container" id="exercisesContainer">
+        <!-- Content will be dynamically populated -->
+    </div>
+
+    <script src="script.js"></script>
+    <script src="workout-plan.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Just display user name if available
+            const userData = UserManagement.getCurrentUser();
+            if (userData && userData.name) {
+                document.getElementById('userName').textContent = `Welcome, ${userData.name}`;
+            }
+        });
+    </script>
+</body>
+</html> 

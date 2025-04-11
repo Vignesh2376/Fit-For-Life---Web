@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Download Exercise GIFs</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        button { padding: 10px 20px; margin: 10px; }
+        #status { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Exercise GIF Downloader</h1>
+    <button onclick="downloadGifs()">Download Exercise GIFs</button>
+    <div id="status"></div>
+
+    <script>
+        const exerciseGifs = {
+            'pushups': 'https://thumbs.gfycat.com/GlossySkinnyDuckbillcat-size_restricted.gif',
+            'incline-pushups': 'https://thumbs.gfycat.com/UnhappyDesertedKakarikis-size_restricted.gif',
+            'knee-pushups': 'https://thumbs.gfycat.com/SpectacularTerrificChanticleer-size_restricted.gif',
+            'wall-pushups': 'https://thumbs.gfycat.com/FaroffShorttermBear-size_restricted.gif',
+            'diamond-pushups': 'https://thumbs.gfycat.com/FocusedMindlessGermanshepherd-size_restricted.gif',
+            'wide-pushups': 'https://thumbs.gfycat.com/DaringWellwornGrub-size_restricted.gif',
+            'decline-pushups': 'https://thumbs.gfycat.com/UnacceptableInformalGermanspitz-size_restricted.gif',
+            'dumbbell-floor-press': 'https://thumbs.gfycat.com/SeparateRemarkableGazelle-size_restricted.gif',
+            'band-pushups': 'https://thumbs.gfycat.com/GleamingInformalFieldmouse-size_restricted.gif',
+            'archer-pushups': 'https://thumbs.gfycat.com/DentalScratchyHyracotherium-size_restricted.gif'
+            // Add more exercises as needed
+        };
+
+        async function downloadGifs() {
+            const status = document.getElementById('status');
+            status.innerHTML = 'Starting downloads...<br>';
+
+            for (const [name, url] of Object.entries(exerciseGifs)) {
+                try {
+                    const response = await fetch(url);
+                    const blob = await response.blob();
+                    const downloadUrl = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = downloadUrl;
+                    a.download = `${name}.gif`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(downloadUrl);
+                    status.innerHTML += `✅ Downloaded ${name}.gif<br>`;
+                } catch (error) {
+                    status.innerHTML += `❌ Failed to download ${name}.gif: ${error}<br>`;
+                }
+                // Add a small delay between downloads
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+
+            status.innerHTML += 'Download complete! Please move the GIFs to the assets/images/exercises/ directory.';
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fit for Life - Choose Your Body Type</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="body-type.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="body-type-container">
+            <div class="header">
+                <div class="header-icon">
+                    <i class="fas fa-dumbbell"></i>
+                </div>
+                <h1>Choose Your Goal Body Type</h1>
+                <p class="subtitle">Select the body type you want to achieve</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 66%"></div>
+                </div>
+                <div class="user-info">
+                    <span id="userName"></span>
+                    <button onclick="UserManagement.logout()" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <div class="body-types-grid">
+                <!-- Bulked Body Type -->
+                <div class="body-type-card" data-type="bulked">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f" alt="Bulked Body Type">
+                        <div class="overlay">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h2>Bulked</h2>
+                        <p>High muscle mass with some body fat. Focus on strength and power.</p>
+                        <ul class="features">
+                            <li><i class="fas fa-check"></i> Increased muscle mass</li>
+                            <li><i class="fas fa-check"></i> Higher body fat percentage</li>
+                            <li><i class="fas fa-check"></i> Strong and powerful build</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Lean Body Type -->
+                <div class="body-type-card" data-type="lean">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5" alt="Lean Body Type">
+                        <div class="overlay">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h2>Lean</h2>
+                        <p>Balanced muscle mass with low body fat. Focus on definition and tone.</p>
+                        <ul class="features">
+                            <li><i class="fas fa-check"></i> Moderate muscle mass</li>
+                            <li><i class="fas fa-check"></i> Low body fat percentage</li>
+                            <li><i class="fas fa-check"></i> Athletic and defined build</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Ripped Body Type -->
+                <div class="body-type-card" data-type="ripped">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1549576490-b0b4831ef60a" alt="Ripped Body Type">
+                        <div class="overlay">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h2>Ripped</h2>
+                        <p>Maximum muscle definition with very low body fat. Focus on extreme definition.</p>
+                        <ul class="features">
+                            <li><i class="fas fa-check"></i> High muscle definition</li>
+                            <li><i class="fas fa-check"></i> Very low body fat</li>
+                            <li><i class="fas fa-check"></i> Extreme vascularity</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <button class="continue-btn" disabled>
+                <span>Continue to Workout Plan</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script src="body-type.js"></script>
+</body>
+</html> 

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Diet Plan</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="workout-container">
+            <div class="header">
+                <div class="header-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <h1>Your Personalized Diet Plan</h1>
+                <p class="subtitle">Based on your <span id="currentBodyType">body type</span></p>
+            </div>
+
+            <div class="diet-plan-section">
+                <h3>Daily Nutrition Overview</h3>
+                <div class="nutrition-overview">
+                    <div class="calorie-circle">
+                        <div class="circle-content">
+                            <span class="calorie-number" id="dailyCalories">0</span>
+                            <span class="calorie-label">Daily Calories</span>
+                        </div>
+                    </div>
+                    <div class="macro-circles">
+                        <div class="macro-circle protein">
+                            <div class="circle-content">
+                                <span class="macro-number" id="proteinGrams">0g</span>
+                                <span class="macro-label">Protein</span>
+                            </div>
+                        </div>
+                        <div class="macro-circle carbs">
+                            <div class="circle-content">
+                                <span class="macro-number" id="carbsGrams">0g</span>
+                                <span class="macro-label">Carbs</span>
+                            </div>
+                        </div>
+                        <div class="macro-circle fats">
+                            <div class="circle-content">
+                                <span class="macro-number" id="fatsGrams">0g</span>
+                                <span class="macro-label">Fats</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="diet-plan-section">
+                <h3>Your Daily Meal Plan</h3>
+                <div class="meal-grid" id="mealGrid">
+                    <!-- Meal cards will be dynamically added here -->
+                </div>
+            </div>
+
+            <div class="diet-plan-section recommendations-section">
+                <h3>Dietary Recommendations</h3>
+                <div id="foodRecommendations" class="recommendations-container">
+                    <!-- Recommendations will be populated here by JavaScript -->
+                </div>
+            </div>
+
+            <div class="diet-plan-section timing-section">
+                <h3>Meal Timing</h3>
+                <div id="mealTiming" class="timing-container">
+                    <!-- Meal timing will be populated here by JavaScript -->
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <button class="btn btn-secondary" onclick="window.location.href='workout-plan.html'">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Workout Plan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize user data
+        if (!localStorage.getItem('userData')) {
+            localStorage.setItem('userData', JSON.stringify({
+                bodyType: 'mesomorph',
+                name: 'User'
+            }));
+        }
+    </script>
+    <script src="diet-plan.js"></script>
+</body>
+</html> 

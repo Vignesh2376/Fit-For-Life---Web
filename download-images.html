@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Download Body Part Images</title>
+    <script>
+        const bodyParts = {
+            chest: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b',
+            back: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61',
+            shoulders: 'https://images.unsplash.com/photo-1598971639058-999f3bfbc8d3',
+            biceps: 'https://images.unsplash.com/photo-1584466977773-e625c37cdd50',
+            triceps: 'https://images.unsplash.com/photo-1590507621108-433608c97823',
+            forearms: 'https://images.unsplash.com/photo-1591940742878-14d040bee6a9',
+            legs: 'https://images.unsplash.com/photo-1434608519344-49d77a699e1d'
+        };
+
+        function downloadImages() {
+            Object.entries(bodyParts).forEach(([part, url]) => {
+                const img = new Image();
+                img.crossOrigin = "Anonymous";
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    
+                    const link = document.createElement('a');
+                    link.download = `${part}.jpg`;
+                    link.href = canvas.toDataURL('image/jpeg', 0.8);
+                    link.click();
+                };
+                img.src = `${url}?w=800&fit=crop&auto=format`;
+            });
+        }
+    </script>
+</head>
+<body>
+    <button onclick="downloadImages()">Download Body Part Images</button>
+    <p>Click the button above to download images for all body parts. The images will be saved in your downloads folder.</p>
+</body>
+</html> 
