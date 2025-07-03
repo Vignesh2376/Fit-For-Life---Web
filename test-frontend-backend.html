@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend-Backend Integration Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .loading { background-color: #fff3cd; border-color: #ffeaa7; }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .status {
+            font-weight: bold;
+            font-size: 18px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Frontend-Backend Integration Test</h1>
+    
+    <div class="status" id="overall-status">Testing integration...</div>
+    
+    <div class="test-section">
+        <h2>1. Backend Server Test</h2>
+        <button onclick="testBackendServer()">Test Backend (Port 8000)</button>
+        <div id="backend-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. API Endpoints Test</h2>
+        <button onclick="testAPIEndpoints()">Test API Endpoints</button>
+        <div id="api-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Workout Plan Integration Test</h2>
+        <button onclick="testWorkoutPlanIntegration()">Test Workout Plan</button>
+        <div id="workout-plan-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Complete Integration Test</h2>
+        <button onclick="runCompleteTest()">Run Complete Test</button>
+        <div id="complete-result"></div>
+    </div>
+
+    <script type="module">
+        import apiRequest from './api.js';
+
+        let testResults = {
+            backend: false,
+            api: false,
+            workoutPlan: false
+        };
+
+        window.testBackendServer = async function() {
+            const resultDiv = document.getElementById('backend-result');
+            resultDiv.innerHTML = '<div class="loading">Testing backend server...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/v1/exercises/body-parts/');
+                if (response.ok) {
+                    testResults.backend = true;
+                    resultDiv.innerHTML = '<div class="success">✅ Backend server is running on port 8000</div>';
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                testResults.backend = false;
+                resultDiv.innerHTML = `<div class="error">❌ Backend server test failed: ${error.message}</div>`;
+            }
+            updateOverallStatus();
+        };
+
+        window.testAPIEndpoints = async function() {
+            const resultDiv = document.getElementById('api-result');
+            resultDiv.innerHTML = '<div class="loading">Testing API endpoints...</div>';
+            
+            try {
+                // Test body parts
+                const bodyParts = await apiRequest('exercises/body-parts/');
+                
+                // Test exercises
+                const exercises = await apiRequest('exercises/exercises/');
+                
+                testResults.api = true;
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <h3>✅ API Endpoints Working</h3>
+                        <p>Body Parts: ${bodyParts.count || bodyParts.length} found</p>
+                        <p>Exercises: ${exercises.count || exercises.length} found</p>
+                        <details>
+                            <summary>Sample Body Parts</summary>
+                            <pre>${JSON.stringify(bodyParts.results || bodyParts.slice(0, 3), null, 2)}</pre>
+                        </details>
+                    </div>
+                `;
+            } catch (error) {
+                testResults.api = false;
+                resultDiv.innerHTML = `<div class="error">❌ API endpoints test failed: ${error.message}</div>`;
+            }
+            updateOverallStatus();
+        };
+
+        window.testWorkoutPlanIntegration = async function() {
+            const resultDiv = document.getElementById('workout-plan-result');
+            resultDiv.innerHTML = '<div class="loading">Testing workout plan integration...</div>';
+            
+            try {
+                // Test workout logging
+                const bodyParts = await apiRequest('exercises/body-parts/');
+                const exercises = await apiRequest('exercises/exercises/');
+                
+                if (bodyParts.count > 0 && exercises.count > 0) {
+                    const bodyPart = bodyParts.results[0];
+                    const exercise = exercises.results[0];
+                    
+                    const workoutData = {
+                        body_part: bodyPart.id,
+                        notes: 'Integration test workout',
+                        workout_exercises: [{
+                            exercise: exercise.id,
+                            sets: 3,
+                            reps: 10
+                        }]
+                    };
+                    
+                    const result = await apiRequest('workouts/logs/', 'POST', workoutData);
+                    
+                    testResults.workoutPlan = true;
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <h3>✅ Workout Plan Integration Working</h3>
+                            <p>Successfully logged workout with ID: ${result.id}</p>
+                            <details>
+                                <summary>Workout Details</summary>
+                                <pre>${JSON.stringify(result, null, 2)}</pre>
+                            </details>
+                        </div>
+                    `;
+                } else {
+                    throw new Error('No body parts or exercises found');
+                }
+            } catch (error) {
+                testResults.workoutPlan = false;
+                resultDiv.innerHTML = `<div class="error">❌ Workout plan integration failed: ${error.message}</div>`;
+            }
+            updateOverallStatus();
+        };
+
+        window.runCompleteTest = async function() {
+            const resultDiv = document.getElementById('complete-result');
+            resultDiv.innerHTML = '<div class="loading">Running complete integration test...</div>';
+            
+            await testBackendServer();
+            await testAPIEndpoints();
+            await testWorkoutPlanIntegration();
+            
+            const allPassed = testResults.backend && testResults.api && testResults.workoutPlan;
+            
+            resultDiv.innerHTML = `
+                <div class="${allPassed ? 'success' : 'error'}">
+                    <h3>${allPassed ? '✅' : '❌'} Complete Integration Test Results</h3>
+                    <ul>
+                        <li>Backend Server: ${testResults.backend ? '✅ PASS' : '❌ FAIL'}</li>
+                        <li>API Endpoints: ${testResults.api ? '✅ PASS' : '❌ FAIL'}</li>
+                        <li>Workout Plan: ${testResults.workoutPlan ? '✅ PASS' : '❌ FAIL'}</li>
+                    </ul>
+                    <p><strong>Overall Status: ${allPassed ? 'INTEGRATION SUCCESSFUL' : 'INTEGRATION FAILED'}</strong></p>
+                </div>
+            `;
+        };
+
+        function updateOverallStatus() {
+            const statusDiv = document.getElementById('overall-status');
+            const allPassed = testResults.backend && testResults.api && testResults.workoutPlan;
+            const partialPassed = testResults.backend || testResults.api || testResults.workoutPlan;
+            
+            if (allPassed) {
+                statusDiv.innerHTML = '🎉 FRONTEND AND BACKEND ARE FULLY INTEGRATED!';
+                statusDiv.style.color = 'green';
+            } else if (partialPassed) {
+                statusDiv.innerHTML = '⚠️ PARTIAL INTEGRATION - Some tests failed';
+                statusDiv.style.color = 'orange';
+            } else {
+                statusDiv.innerHTML = '❌ INTEGRATION FAILED - Backend not accessible';
+                statusDiv.style.color = 'red';
+            }
+        }
+
+        // Auto-run tests on page load
+        window.addEventListener('load', function() {
+            setTimeout(runCompleteTest, 1000);
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Integration Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .loading { background-color: #fff3cd; border-color: #ffeaa7; }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Backend Integration Test</h1>
+    
+    <div class="test-section">
+        <h2>API Connection Test</h2>
+        <button onclick="testConnection()">Test Connection</button>
+        <div id="connection-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Body Parts Test</h2>
+        <button onclick="testBodyParts()">Load Body Parts</button>
+        <div id="body-parts-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Exercises Test</h2>
+        <button onclick="testExercises()">Load Exercises</button>
+        <div id="exercises-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Workout Logging Test</h2>
+        <button onclick="testWorkoutLogging()">Test Workout Log</button>
+        <div id="workout-result"></div>
+    </div>
+
+    <script type="module">
+        import apiRequest from './api.js';
+
+        window.testConnection = async function() {
+            const resultDiv = document.getElementById('connection-result');
+            resultDiv.innerHTML = '<div class="loading">Testing connection...</div>';
+            
+            try {
+                const response = await apiRequest('exercises/body-parts/');
+                resultDiv.innerHTML = `<div class="success">✅ Connection successful! Found ${response.length} body parts.</div>`;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">❌ Connection failed: ${error.message || error}</div>`;
+            }
+        };
+
+        window.testBodyParts = async function() {
+            const resultDiv = document.getElementById('body-parts-result');
+            resultDiv.innerHTML = '<div class="loading">Loading body parts...</div>';
+            
+            try {
+                const bodyParts = await apiRequest('exercises/body-parts/');
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <h3>✅ Body Parts Loaded (${bodyParts.length})</h3>
+                        <pre>${JSON.stringify(bodyParts, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">❌ Failed to load body parts: ${error.message || error}</div>`;
+            }
+        };
+
+        window.testExercises = async function() {
+            const resultDiv = document.getElementById('exercises-result');
+            resultDiv.innerHTML = '<div class="loading">Loading exercises...</div>';
+            
+            try {
+                const exercises = await apiRequest('exercises/exercises/');
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <h3>✅ Exercises Loaded (${exercises.length})</h3>
+                        <p>Sample exercises:</p>
+                        <pre>${JSON.stringify(exercises.slice(0, 3), null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">❌ Failed to load exercises: ${error.message || error}</div>`;
+            }
+        };
+
+        window.testWorkoutLogging = async function() {
+            const resultDiv = document.getElementById('workout-result');
+            resultDiv.innerHTML = '<div class="loading">Testing workout logging...</div>';
+            
+            try {
+                // First get a body part and exercise
+                const bodyParts = await apiRequest('exercises/body-parts/');
+                const exercises = await apiRequest('exercises/exercises/');
+                
+                if (bodyParts.length === 0 || exercises.length === 0) {
+                    throw new Error('No body parts or exercises found');
+                }
+
+                const bodyPart = bodyParts[0];
+                const exercise = exercises[0];
+
+                const workoutData = {
+                    body_part: bodyPart.id,
+                    notes: 'Test workout from integration test',
+                    workout_exercises: [{
+                        exercise: exercise.id,
+                        sets: 3,
+                        reps: 10
+                    }]
+                };
+
+                const result = await apiRequest('workouts/logs/', 'POST', workoutData);
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <h3>✅ Workout Logged Successfully!</h3>
+                        <p>Workout ID: ${result.id}</p>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">❌ Failed to log workout: ${error.message || error}</div>`;
+            }
+        };
+    </script>
+</body>
+</html> 
