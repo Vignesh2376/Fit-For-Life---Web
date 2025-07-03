@@ -1,0 +1,109 @@
+/* Index Page (Login/Signup) Specific Styles */
+
+/* Override any conflicting styles */
+.login-form, .signup-form {
+    position: relative !important;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    transition: all 0.3s ease;
+}
+
+.login-form {
+    display: block;
+}
+
+.signup-form {
+    display: none;
+}
+
+.signup-form.active-form {
+    display: block;
+}
+
+.login-form.active-form {
+    display: block;
+}
+
+.input-with-icon {
+    position: relative;
+}
+
+.input-with-icon i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    z-index: 2;
+}
+
+.input-with-icon input {
+    padding-left: 40px;
+}
+
+/* Improved colors for better visibility */
+.form-options {
+    color: #fff !important;
+}
+
+.form-options label {
+    color: #fff !important;
+    cursor: pointer;
+}
+
+.form-options input[type="checkbox"] {
+    accent-color: #4CAF50;
+}
+
+.forgot-password {
+    color: #4CAF50 !important;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.forgot-password:hover {
+    color: #45a049 !important;
+    text-decoration: underline;
+}
+
+.signup-link, .login-link {
+    color: #fff !important;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.switch-form {
+    color: #4CAF50 !important;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.switch-form:hover {
+    color: #45a049 !important;
+    text-decoration: underline;
+}
+
+/* Form switching animation */
+.form-container {
+    position: relative;
+    min-height: 400px;
+}
+
+.login-form, .signup-form {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.login-form.active-form, .signup-form.active-form {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+} 

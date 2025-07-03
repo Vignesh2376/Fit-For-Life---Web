@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Tracking - Fit For Life</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="progress-tracking.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-logo">Fit For Life</h1>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="workout-plan.html">Workout Plan</a></li>
+                <li><a href="progress-tracking.html" class="active">Progress</a></li>
+                <li><a href="diet-plan.html">Diet Plan</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="progress-container">
+        <div class="progress-header">
+            <h1>AI-Powered Progress Tracking</h1>
+            <p>Track your fitness journey with intelligent insights and visualizations</p>
+        </div>
+
+        <div id="loading" class="loading">
+            <h3>Loading your progress data...</h3>
+        </div>
+
+        <div id="content" style="display: none;">
+            <!-- Stats Overview -->
+            <div class="stats-grid" id="statsOverview">
+                <!-- Stats will be populated by JavaScript -->
+            </div>
+
+            <!-- AI Insights -->
+            <div class="insights-section">
+                <h2>AI Insights & Recommendations</h2>
+                <div id="insightsContainer">
+                    <!-- Insights will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="progress-grid">
+                <div class="progress-card">
+                    <h3>Weight Progress</h3>
+                    <div class="chart-container">
+                        <canvas id="weightChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="progress-card">
+                    <h3>Workout Frequency</h3>
+                    <div class="chart-container">
+                        <canvas id="frequencyChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="progress-card">
+                    <h3>Body Part Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="bodyPartChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="progress-card">
+                    <h3>Exercise Progression</h3>
+                    <div class="chart-container">
+                        <canvas id="progressionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Logging -->
+            <div class="insights-section">
+                <h2>Log Your Progress</h2>
+                <button class="log-progress-btn" onclick="toggleProgressForm()">
+                    <i class="fas fa-plus"></i> Log New Progress
+                </button>
+                
+                <div id="progressForm" class="progress-form">
+                    <form onsubmit="logProgress(event)">
+                        <div class="form-group">
+                            <label for="weight">Weight (kg)</label>
+                            <input type="number" id="weight" step="0.1" placeholder="Enter your weight">
+                        </div>
+                        <div class="form-group">
+                            <label for="bodyFat">Body Fat Percentage</label>
+                            <input type="number" id="bodyFat" step="0.1" placeholder="Enter body fat %">
+                        </div>
+                        <div class="form-group">
+                            <label for="muscleMass">Muscle Mass (kg)</label>
+                            <input type="number" id="muscleMass" step="0.1" placeholder="Enter muscle mass">
+                        </div>
+                        <button type="submit" class="log-progress-btn">Log Progress</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load scripts -->
+    <script type="module" src="script.js"></script>
+    <script type="module" src="progress-tracking.js"></script>
+</body>
+</html> 

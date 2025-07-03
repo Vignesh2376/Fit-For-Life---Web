@@ -424,84 +424,9 @@ body {
     padding: 1.5rem;
 }
 
-.exercises-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    padding: 2rem;
-}
-
-.exercise-card {
-    background: white;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-}
-
-.exercise-card:hover {
-    transform: translateY(-5px);
-}
-
-.exercise-animation {
-    width: 100%;
-    height: 250px;
-    background: #f5f5f5;
-    overflow: hidden;
-}
-
-.exercise-animation img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-.exercise-info {
-    padding: 1.5rem;
-}
-
-.exercise-info h3 {
-    color: #333;
-    margin-bottom: 1rem;
-    font-size: 1.2em;
-}
-
-.exercise-info p {
-    color: #666;
-    margin-bottom: 1rem;
-    line-height: 1.6;
-}
-
-.exercise-stats {
-    display: flex;
-    gap: 1.5rem;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid #eee;
-}
-
-.stat {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #666;
-}
-
-.stat i {
-    color: #4CAF50;
-}
+/* Exercise styles moved to workout-plan.css to avoid conflicts */
 
 @media (max-width: 768px) {
-    .exercises-grid {
-        grid-template-columns: 1fr;
-        padding: 1rem;
-    }
-    
-    .exercise-animation {
-        height: 200px;
-    }
-    
     .modal-content {
         width: 100%;
         margin: 0;
@@ -1144,4 +1069,22 @@ ul {
     .timing-list {
         grid-template-columns: 1fr;
     }
+}
+
+.card-image {
+    position: relative;
+    width: 100%;
+    height: 180px; /* Adjust as needed for your card design */
+    overflow: hidden;
+    border-radius: 12px 12px 0 0;
+}
+.card-image img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    left: 0;
+    top: 0;
+    border-radius: 12px 12px 0 0;
+    display: block;
 } 

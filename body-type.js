@@ -1,54 +1,140 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Get current user data first
-    const userData = UserManagement.getCurrentUser();
-    
-    // Check if user is logged in and has completed previous steps
-    if (!UserManagement.isLoggedIn() || !userData || !userData.dob || !userData.weight || !userData.height) {
+import apiRequest from './api.js';
+
+document.addEventListener('DOMContentLoaded', async function() {
+    if (!localStorage.getItem('access')) {
         window.location.href = 'index.html';
         return;
     }
 
-    // Display user's name
-    if (userData.name) {
-        document.getElementById('userName').textContent = `Welcome, ${userData.name}`;
+    let userData = null;
+    try {
+        userData = await apiRequest('accounts/profile/');
+    } catch (err) {
+        showMessage('Session expired. Please login again.', 'error');
+        localStorage.removeItem('access');
+        localStorage.removeItem('refresh');
+        setTimeout(() => window.location.href = 'index.html', 1500);
+        return;
     }
 
-    // Get all body type cards
+    if (!userData || !userData.date_of_birth || !userData.weight || !userData.height) {
+        window.location.href = 'user-details.html';
+        return;
+    }
+
+    const userNameElement = document.getElementById('userName');
+    if (userData.first_name && userNameElement) {
+        userNameElement.textContent = `Welcome, ${userData.first_name}`;
+    }
+
     const bodyTypeCards = document.querySelectorAll('.body-type-card');
     const continueBtn = document.querySelector('.continue-btn');
 
-    // Handle body type selection
     bodyTypeCards.forEach(card => {
         card.addEventListener('click', function() {
-            // Remove selection from all cards
             bodyTypeCards.forEach(c => c.classList.remove('selected'));
-            // Add selection to clicked card
             this.classList.add('selected');
-            // Enable continue button
             continueBtn.disabled = false;
         });
     });
 
-    // Handle continue button click
-    continueBtn.addEventListener('click', function() {
-        // Get selected body type
+    continueBtn.addEventListener('click', async function() {
         const selectedCard = document.querySelector('.body-type-card.selected');
-        if (!selectedCard) return;
+        if (!selectedCard) {
+            showMessage('Please select a body type', 'error');
+            return;
+        }
 
         const bodyType = selectedCard.getAttribute('data-type');
-
-        // Update user data with selected body type and mark setup as complete
-        const updatedUserData = {
-            ...userData,
-            bodyType: bodyType,
-            completedSetup: true,
-            lastLogin: new Date().toISOString()
-        };
-
-        // Save updated user data
-        UserManagement.saveUserData(updatedUserData);
-
-        // Redirect to workout plan
-        window.location.href = 'workout-plan.html';
+        
+        // Save body type to localStorage for diet plan access
+        const userDetails = JSON.parse(localStorage.getItem('userDetails') || '{}');
+        userDetails.bodyType = bodyType;
+        localStorage.setItem('userDetails', JSON.stringify(userDetails));
+        
+        try {
+            await apiRequest('accounts/profile/', 'PUT', {
+                body_type: bodyType,
+                completed_setup: true
+            });
+            showMessage('Body type selected successfully! Redirecting...', 'success');
+            setTimeout(() => {
+                window.location.href = 'workout-plan.html';
+            }, 1000);
+        } catch (err) {
+            showMessage(err.detail || err.message || 'Failed to save body type', 'error');
+        }
     });
-}); 
+});
+
+function showMessage(message, type = 'info') {
+    const existingMessages = document.querySelectorAll('.message');
+    existingMessages.forEach(msg => msg.remove());
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${type}`;
+    messageDiv.textContent = message;
+    messageDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 500;
+        z-index: 1000;
+        animation: slideIn 0.3s ease-out;
+        max-width: 300px;
+        word-wrap: break-word;
+    `;
+    switch(type) {
+        case 'success':
+            messageDiv.style.backgroundColor = '#4CAF50';
+            break;
+        case 'error':
+            messageDiv.style.backgroundColor = '#f44336';
+            break;
+        case 'warning':
+            messageDiv.style.backgroundColor = '#ff9800';
+            break;
+        default:
+            messageDiv.style.backgroundColor = '#2196F3';
+    }
+    document.body.appendChild(messageDiv);
+    setTimeout(() => {
+        if (messageDiv.parentNode) {
+            messageDiv.style.animation = 'slideOut 0.3s ease-in';
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.remove();
+                }
+            }, 300);
+        }
+    }, 3000);
+}
+
+// Add CSS animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style); 

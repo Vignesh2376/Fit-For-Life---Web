@@ -157,30 +157,78 @@
 .card-content h2 {
     font-size: 1.5em;
     color: #333;
-    margin-bottom: 10px;
-}
-
-.card-content p {
-    color: #666;
-    margin-bottom: 20px;
-    line-height: 1.5;
-}
-
-.features {
-    list-style: none;
-    padding: 0;
-}
-
-.features li {
+    margin-bottom: 15px;
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #666;
-    margin-bottom: 8px;
 }
 
-.features i {
+.card-content h2 i {
     color: #4CAF50;
+    font-size: 1.2em;
+}
+
+.body-description {
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    font-size: 0.95em;
+}
+
+.body-characteristics {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.characteristic {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 3px solid #4CAF50;
+    transition: background 0.3s ease;
+}
+
+.characteristic:hover {
+    background: #e9ecef;
+}
+
+.characteristic i {
+    color: #4CAF50;
+    font-size: 1.1em;
+    width: 20px;
+    text-align: center;
+}
+
+.characteristic span {
+    color: #555;
+    font-weight: 500;
+    font-size: 0.9em;
+}
+
+.goal-focus {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.goal-focus h4 {
+    margin: 0 0 8px 0;
+    font-size: 1em;
+    opacity: 0.9;
+}
+
+.goal-focus p {
+    margin: 0;
+    font-size: 0.9em;
+    line-height: 1.4;
+    opacity: 0.95;
 }
 
 /* Continue button */

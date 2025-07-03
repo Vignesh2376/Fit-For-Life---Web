@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Diet Plan</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="diet-plan.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -80,15 +81,9 @@
         </div>
     </div>
 
-    <script>
-        // Initialize user data
-        if (!localStorage.getItem('userData')) {
-            localStorage.setItem('userData', JSON.stringify({
-                bodyType: 'mesomorph',
-                name: 'User'
-            }));
-        }
-    </script>
-    <script src="diet-plan.js"></script>
+    <!-- Load scripts -->
+    <script type="module" src="script.js"></script>
+    <script type="module" src="diet-plan.js"></script>
+    <script type="module" src="diet-plan-init.js"></script>
 </body>
 </html> 
